@@ -1,0 +1,53 @@
+
+.rbac-hide {
+    display: none;
+}
+
+.rbac-menu-item .rbac-menu-body {
+    /*margin-left: 20px;*/
+}
+
+.rbac-menu-body a {
+    display: block;
+}
+
+.rbac-menu-body a.rbac-active {
+    color: #2e6da4;
+}
+
+/*.menu div {*/
+    /*background-color: #2e6da4;*/
+    /*line-height: 36px;*/
+    /*text-align: center;*/
+    /*color: white;*/
+/*}*/
+
+.menu div div{
+    background-color: #2e6da4;
+    line-height: 36px;
+    text-align: center;
+    color: white;
+}
+
+.menu div div div{
+    background-color: #e0e0e0;
+    line-height: 36px;
+    text-align: center;
+    color: white;
+}
+
+
+.menu div div a{
+    background-color: #f5f5f5;
+    line-height: 36px;
+    text-align: center;
+    color: white;
+}
+
+.menu div div div a{
+    background-color: #f5f5f5;
+    line-height: 36px;
+    text-align: center;
+    color: white;
+}
+

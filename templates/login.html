@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="/static/bootstrap-3.3.7-dist%20/css/bootstrap.css">
+    <style>
+        .btn-block:hover {
+            background-color: #337ab7;
+            color: white;
+        }
+        #err-msg {
+            color: firebrick;
+        }
+    </style>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row" style="margin-top: 12%">
+        <div class="col-sm-3 col-sm-offset-7">
+            <ul class="nav nav-tabs">
+                <li role="presentation" class="active"><a href="#"> 登  录 </a></li>
+                <li role="presentation"><a href="/register.html/"> 注  册 </a></li>
+            </ul>
+            <form class="form-horizontal" action="/login.html/" method="post" novalidate style="margin-top: -2px; padding: 40px 30px 20px 30px; border: 1px solid #ddd; border-top: 0; border-radius: 4px">
+                {% csrf_token %}
+                <div class="form-group">
+                    <div class="col-sm-12">
+                        {{ obj.username }}<span id="err-msg">{{ obj.errors.username.0 }}</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-12">
+                        {{ obj.password }}<span id="err-msg">{{ obj.errors.password.0 }}</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-12">
+                        <a href="#" style="float: right">忘记密码?</a>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-12">
+                        <button id='login-btn' type="submit" class="btn btn-block" style="">登 录</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script src="/static/jquery-3.2.1.js"></script>
+<script src="/static/logincheck-0.1.js"></script>
+<script>
+    $.loginCheck();
+</script>
+</body>
+</html>
