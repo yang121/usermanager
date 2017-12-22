@@ -9,17 +9,13 @@
         body{
             margin: 0;
         }
-        .pd-header{
-            height: 48px;
-            background-color: brown;
-        }
         .pd-body .menu{
             float: left;
-            width: 10%;
+            width: 15%;
         }
         .pd-body .content{
             float: left;
-            width: 90%;
+            width: 85%;
         }
 
 
@@ -28,14 +24,39 @@
     {% block css %}{% endblock %}
 </head>
 <body>
-    <div class="pd-header"></div>
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                    data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/backend/">后台管理</a>
+        </div>
+        <div class="collapse navbar-collapse">
+            <p class="navbar-text navbar-left">返回<a href="/index.html/" class="navbar-link">首页</a></p>
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+</nav>
     <div class="pd-body">
         <div class="menu">
-            {% rbac_menu request %}
+            <div style="position:relative; padding: 10px 15px 0 15px">
+                {% rbac_menu request %}
+            </div>
         </div>
-        <div class="content">{% block content %}{% endblock %}</div>
+        <div class="content">
+{#            <ol class="breadcrumb">#}
+{#                <li><a href="#">Home</a></li>#}
+{#                <li><a href="#">Library</a></li>#}
+{#                <li class="active">Data</li>#}
+{#            </ol>#}
+            {% block content %}{% endblock %}
+        </div>
     </div>
-
     <script src="/static/jquery-3.2.1.js"></script>
     <script>
         {% rbac_js %}

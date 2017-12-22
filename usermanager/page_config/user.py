@@ -1,5 +1,5 @@
 
-table_config = [
+user_config = [
     {
         'q': None,         # 数据查询字段
         'title': '选择',     # 显示标题
@@ -62,7 +62,7 @@ table_config = [
         'title': '操作',
         'display': True,
         'text': {
-            'tpl': "<a href='/del?nid={nid}'>删除</a>",
+            'tpl': "<a href='/backend/userinfo_json.html?md=delete&nid={nid}'>删除</a>",
             'kwargs': {'nid': '@id'}
         },
         'attrs':{'k1':'v1','k2':'@id'}
@@ -72,5 +72,5 @@ table_config = [
 search_config =  [
     {'name': 'id', 'text': '用户ID', 'search_type': 'input'},
     {'name': 'username', 'text': '用户名', 'search_type': 'input'},
-    {'name': 'device_status_id', 'text': '资产状态', 'search_type': 'input'},
+    {'name': 'email', 'text': '电子邮箱', 'search_type': 'input'},
 ]

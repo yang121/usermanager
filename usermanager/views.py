@@ -7,10 +7,12 @@ from django.core.exceptions import ValidationError
 from utils.auth_tool import my_auth
 from usermanager.form import formformat
 from rbac.service import initial_permission
+from utils.json_time_extend import JsonCustomEncoder
+import json
 
 
 class Login(RbacView, View):
-    def get(self, request, *args, **kwargs):
+    def look(self, request, *args, **kwargs):
         obj = formformat.LoginForm()
         return render(request, 'login.html',{"obj": obj})
 
@@ -41,7 +43,7 @@ class Login(RbacView, View):
 
 
 class Register(RbacView, View):
-    def get(self, request, *args, **kwargs):
+    def look(self, request, *args, **kwargs):
         obj = formformat.RegisterForm()
         return render(request, 'register.html', {"obj": obj})
 
@@ -103,12 +105,12 @@ class Register(RbacView, View):
 
 
 class Index(RbacView, View):
-    def get(self, request, *args, **kwargs):
+    def look(self, request, *args, **kwargs):
         return render(request, 'index.html')
 
 
 class Logout(RbacView, View):
-    def get(self, request, *args, **kwargs):
+    def look(self, request, *args, **kwargs):
         request.session['login_status'] = False
         del request.session['username']
         del request.session['uid']
@@ -117,7 +119,7 @@ class Logout(RbacView, View):
 
 
 class Code(RbacView, View):
-    def get(self, request, *args, **kwargs):
+    def look(self, request, *args, **kwargs):
         from utils.code_generator import rd_check_code
         img, code = rd_check_code()
         from io import BytesIO
@@ -127,6 +129,71 @@ class Code(RbacView, View):
         print(code)
         return HttpResponse(stream.getvalue())
 
-class UserManager(RbacView, View):
-    def get(self, request, *args, **kwargs):
+class Backend(RbacView, View):
+    def look(self, request, *args, **kwargs):
         return render(request, 'backend.html')
+
+
+class UserInfo(RbacView, View):
+    def look(self, request, *args, **kwargs):
+        # print(request.permission_code)
+        # if request
+        return render(request, 'userinfo.html')
+
+
+
+
+def get_data_list(request,model_cls,table_config):
+    values_list = []
+    for row in table_config:
+        if not row['q']:
+            continue
+        values_list.append(row['q'])
+
+    from django.db.models import Q
+
+    condition = request.GET.get('condition')
+    condition_dict = json.loads(condition)
+
+    con = Q()
+    for name,values in condition_dict.items():
+        ele = Q() # select xx from where cabinet_num=sdf or cabinet_num='123'
+        ele.connector = 'OR'
+        for item in values:
+            ele.children.append((name,item))
+        con.add(ele, 'AND')
+
+    server_list = model_cls.objects.filter(con).values(*values_list)
+    return server_list
+
+
+class UserInfoJson(RbacView, View):
+    def look(self, request, *args, **kwargs):
+        from usermanager.page_config import user as userConfig
+        server_list = get_data_list(request,models.User,userConfig.user_config)
+        ret = {
+            'server_list': list(server_list),
+            'table_config': userConfig.user_config,
+            'global_dict':{
+                # 'device_type_choices': models.User.device_type_choices,
+                # 'device_status_choices': models.User.device_status_choices,
+                # 'idc_choices': list(models.User.objects.values_list('id','name'))
+            },
+            'search_config': userConfig.search_config
+
+        }
+
+        return HttpResponse(json.dumps(ret, cls=JsonCustomEncoder))
+
+    def delete(self, request, *args, **kwargs):
+        uid = request.GET.get('nid')
+        models.User.objects.filter(id=uid).delete()
+        return redirect('/backend/userinfo.html')
+
+    def post(self, request, *args, **kwargs):
+        if request.method == 'GET':
+            obj = formformat.RegisterForm()
+            return render(request, 'add-userinfo.html', {"obj": obj})
+        else:
+            obj = formformat.RegisterForm(request.POST)
+            return render(request, 'add-userinfo.html', {"obj": obj})

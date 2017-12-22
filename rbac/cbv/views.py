@@ -18,13 +18,11 @@ class MyView(RbacView,View):
     
     MyView类中方法的名称取决于数据库action表code字段的值。PS:此处方法为小写
 """
+from django.conf import settings
 
 class RbacView(object):
     def dispatch(self, request, *args, **kwargs):
-        try:
-            permission_code = request.permission_code.lower()
-        except AttributeError:
-            permission_code = request.method.lower()
+        permission_code = request.GET.get(settings.RBAC_QUERY_KEY, settings.RBAC_DEFAULT_QUERY_VALUE).lower()
         print(permission_code)
         handler = getattr(self, permission_code)
         return handler(request, *args, **kwargs)
